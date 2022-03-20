@@ -19,7 +19,7 @@ export default function Box(position: Vector) {
     })
   );
 
-  useNewComponent(() => Physics.Body(geometry));
+  useNewComponent(() => Physics.Body(geometry, {isStatic : true}));
   useNewComponent(() => Draggable(geometry));
 
   useDraw((context) => {

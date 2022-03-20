@@ -17,7 +17,7 @@ export default function Draggable(geometry: ReturnType<typeof Geometry>) {
   const mouse = useNewComponent(Mouse);
   const { onCanvasLeave } = useNewComponent(LowLevelMouse);
 
-  let originalStatic = false;
+  let originalStatic = true;
   let isDragging = false;
   const startedDraggingAt = new Vector(0, 0);
 

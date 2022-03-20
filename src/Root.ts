@@ -3,25 +3,34 @@ import {
   useNewComponent,
   useChild,
   Canvas,
-  Physics,
   Vector,
+  Label,
+  SystemFont,
+  useDraw,
 } from "@hex-engine/2d";
-import Floor from "./Floor";
-import Box from "./Box";
+import HexGrid from "./HexGrid";
 
 export default function Root() {
   useType(Root);
 
   const canvas = useNewComponent(() => Canvas({ backgroundColor: "white" }));
-  canvas.fullscreen({ pixelZoom: 3 });
+  canvas.fullscreen();
 
-  useNewComponent(Physics.Engine);
+  useChild(() => HexGrid(new Vector(100, 200)));
 
-  const canvasCenter = new Vector(
-    canvas.element.width / 2,
-    canvas.element.height / 2
-  );
+  useChild(() => {
+    const font = useNewComponent(() =>
+      SystemFont({ name: "sans-serif", size: 16, color: "black" })
+    );
+    const label = useNewComponent(() =>
+      Label({
+        text: "Click cell to set to blue, right-click to set to white",
+        font,
+      })
+    );
 
-  useChild(() => Floor(canvasCenter.addY(100)));
-  useChild(() => Box(canvasCenter));
+    useDraw((context) => {
+      label.draw(context, { x: 3, y: font.size });
+    });
+  });
 }
