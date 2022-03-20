@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "hex-engine-scripts": "^0.10.0",
-    "typescript": "^3.9.2"
+    "typescript": "^4.5.5"
   },
   "scripts": {
     "start": "hex-engine-scripts dev",
