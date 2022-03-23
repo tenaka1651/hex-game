@@ -1,4 +1,3 @@
-import { Tile } from './Domain/Tile';
 import {
   useType,
   useNewComponent,
@@ -22,11 +21,13 @@ export const CELL_HEIGHT = 2 * CELL_RADIUS;
 export default function HexCell({
   position,
   getColor,
-  setColor,
+  getResources,
+  developResource,
 }: {
   position: Vector;
   getColor: () => string;
-  setColor: (color: string) => any;
+  getResources : () => string;
+  developResource: (resource: string) => any;
 }) {
   useType(HexCell);
 
@@ -43,17 +44,17 @@ export default function HexCell({
  
   useChild(() => {
     const font = useNewComponent(() =>
-      SystemFont({ name: "sans-serif", size: 16, color: "black" })
+      SystemFont({ name: "sans-serif", size: 12, color: "black" })
     );
     const label = useNewComponent(() =>
       Label({
-        text: "test",
+        text: getResources(),
         font,
       })
     );
 
     useDraw((context) => {
-      label.draw(context, { x: 3, y: font.size });
+      label.draw(context, { x: -40, y: font.size });
     });
   });
 
@@ -75,7 +76,9 @@ export default function HexCell({
   });
 
   mouse.onClick(() => {
-    setColor("blue");
+    developResource("gold");
+    //const label = useEntity().getComponent(Label);
+    //label!.text = getResources();
   });
 
   mouse.onRightClick(() => {
