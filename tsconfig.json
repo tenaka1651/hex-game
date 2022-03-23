@@ -1,4 +1,7 @@
 {
   "extends": "hex-engine-scripts/base-tsconfig.json",
-  "include": ["./src"]
+  "include": ["./src"],
+  "compilerOptions": {
+    "strictNullChecks": true
+  },
 }

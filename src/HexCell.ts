@@ -1,11 +1,16 @@
+import { Tile } from './Domain/Tile';
 import {
   useType,
   useNewComponent,
+  useEntity,
   Vector,
   Geometry,
   Polygon,
   Mouse,
   useDraw,
+  TextBox,
+  SystemFont,
+  Label,
 } from "@hex-engine/2d";
 import { useChild } from "@hex-engine/core";
 import Box from "./Box";
@@ -35,6 +40,22 @@ export default function HexCell({
   ]);
 
   useNewComponent(() => Geometry({ shape, position }));
+ 
+  useChild(() => {
+    const font = useNewComponent(() =>
+      SystemFont({ name: "sans-serif", size: 16, color: "black" })
+    );
+    const label = useNewComponent(() =>
+      Label({
+        text: "test",
+        font,
+      })
+    );
+
+    useDraw((context) => {
+      label.draw(context, { x: 3, y: font.size });
+    });
+  });
 
   const mouse = useNewComponent(Mouse);
 
