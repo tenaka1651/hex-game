@@ -48,12 +48,11 @@ export default function HexCell({
     );
     const label = useNewComponent(() =>
       Label({
-        text: getResources(),
-        font,
+        font
       })
     );
-
     useDraw((context) => {
+      label.text = getResources();
       label.draw(context, { x: -40, y: font.size });
     });
   });
@@ -77,8 +76,6 @@ export default function HexCell({
 
   mouse.onClick(() => {
     developResource("gold");
-    //const label = useEntity().getComponent(Label);
-    //label!.text = getResources();
   });
 
   mouse.onRightClick(() => {
