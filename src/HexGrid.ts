@@ -20,12 +20,16 @@ export default function HexGrid(position: Vector) {
     })
   );
 
+  //Initialise grid or load from API
   const grid = new Grid(6, 6, new NaturalResources());
   for(var i: number = 0; i < 6; i++) {
     for(var j: number = 0; j< 6; j++) {
         grid.set(i,j,new NaturalResources());
     }
-}
+  }
+
+  //Initialise armies
+  
 
   for (const [x, y] of grid.contents()) {
     const isOffsetRow = y % 2 === 1;
