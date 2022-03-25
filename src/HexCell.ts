@@ -1,3 +1,4 @@
+import { Army } from './Domain/Army';
 import {
   useType,
   useNewComponent,
@@ -22,11 +23,13 @@ export default function HexCell({
   position,
   getColor,
   getResources,
+  getArmies,
   developResource,
 }: {
   position: Vector;
   getColor: () => string;
   getResources : () => string;
+  getArmies : () => Army[];
   developResource: (resource: string) => any;
 }) {
   useType(HexCell);
@@ -42,6 +45,13 @@ export default function HexCell({
 
   useNewComponent(() => Geometry({ shape, position }));
  
+  //draw armies
+  //console.log("Get armies = "+getArmies()[0].archers)
+  if(getArmies().length > 0) {
+    useChild(() => Box(new Vector(0, 0)));
+  }
+
+
   useChild(() => {
     const font = useNewComponent(() =>
       SystemFont({ name: "sans-serif", size: 12, color: "black" })

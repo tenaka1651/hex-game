@@ -1,3 +1,5 @@
+import { Army } from './Domain/Army';
+import { TileContents } from './Domain/TileContents';
 import { NaturalResources } from './Domain/NaturalResources';
 import {
   useType,
@@ -21,15 +23,18 @@ export default function HexGrid(position: Vector) {
   );
 
   //Initialise grid or load from API
-  const grid = new Grid(6, 6, new NaturalResources());
+  const grid = new Grid(6, 6, new TileContents());
   for(var i: number = 0; i < 6; i++) {
     for(var j: number = 0; j< 6; j++) {
-        grid.set(i,j,new NaturalResources());
+        grid.set(i,j,new TileContents());
     }
   }
 
   //Initialise armies
-  
+  var testArmy = new Army();
+  testArmy.archers = 5;
+  grid.get(3,3).armies.push(testArmy)
+
 
   for (const [x, y] of grid.contents()) {
     const isOffsetRow = y % 2 === 1;
@@ -39,25 +44,28 @@ export default function HexGrid(position: Vector) {
       HexCell({
         position: new Vector(x * CELL_WIDTH + xOffset, y * 0.75 * CELL_HEIGHT),
         getColor: () => {
-          if(grid.get(x, y).gold > 5) return "yellow"
-          if(grid.get(x, y).silver > 5) return "silver"
-          if(grid.get(x, y).iron > 5) return "brown"
-          if(grid.get(x, y).agriculture > 5) return "green"
+          if(grid.get(x, y).naturalResources.gold > 5) return "yellow"
+          if(grid.get(x, y).naturalResources.silver > 5) return "silver"
+          if(grid.get(x, y).naturalResources.iron > 5) return "brown"
+          if(grid.get(x, y).naturalResources.agriculture > 5) return "green"
           return "grey"
+        },
+        getArmies: () => {
+          return grid.get(x,y).armies;
         },
         getResources: () => {
           let nr = grid.get(x,y);
-          return "G:"+ nr.gold.toString() + " S:"+ nr.silver.toString() + " I:"+ nr.iron.toString() + " A:"+ nr.agriculture.toString();
+          return "G:"+ nr.naturalResources.gold.toString() + " S:"+ nr.naturalResources.silver.toString() + " I:"+ nr.naturalResources.iron.toString() + " A:"+ nr.naturalResources.agriculture.toString();
         },
         developResource: (resource: string) => {
           var nr = grid.get(x,y);
           switch(resource) {
             case "gold" : {
-              nr.gold = nr.gold + 1;
+              nr.naturalResources.gold = nr.naturalResources.gold + 1;
               break;
             }
             case "silver" : {
-              nr.silver = nr.silver + 1;
+              nr.naturalResources.silver = nr.naturalResources.silver + 1;
               break;
             }       
             default: { 
