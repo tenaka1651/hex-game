@@ -13,7 +13,7 @@ import {
   Label,
 } from "@hex-engine/2d";
 import { useChild } from "@hex-engine/core";
-import Box from "./Box";
+import ArmySprite from './Sprites/ArmySprite';
 
 export const CELL_RADIUS = 46;
 export const CELL_WIDTH = Math.sqrt(3) * CELL_RADIUS;
@@ -25,12 +25,14 @@ export default function HexCell({
   getResources,
   getArmies,
   developResource,
+  displayArmySheet
 }: {
   position: Vector;
   getColor: () => string;
   getResources : () => string;
   getArmies : () => Army[];
   developResource: (resource: string) => any;
+  displayArmySheet: () => any;
 }) {
   useType(HexCell);
 
@@ -46,9 +48,13 @@ export default function HexCell({
   useNewComponent(() => Geometry({ shape, position }));
  
   //draw armies
-  //console.log("Get armies = "+getArmies()[0].archers)
   if(getArmies().length > 0) {
-    useChild(() => Box(new Vector(0, 0)));
+    useChild(() => ArmySprite({
+      position: new Vector(0, 0),
+      displayArmySheet: () => {
+        displayArmySheet();
+      }
+    }));
   }
 
 
@@ -89,6 +95,6 @@ export default function HexCell({
   });
 
   mouse.onRightClick(() => {
-    useChild(() => Box(new Vector(0, 0)));
+    //useChild(() => Box(new Vector(0, 0)));
   });
 }

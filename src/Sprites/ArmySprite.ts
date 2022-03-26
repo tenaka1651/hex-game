@@ -6,11 +6,19 @@ import {
   Vector,
   Physics,
   useDraw,
+  Mouse,
 } from "@hex-engine/2d";
-import Draggable from "./Draggable";
+import Draggable from "../Draggable";
 
-export default function Box(position: Vector) {
-  useType(Box);
+export default function ArmySprite({
+  position,
+  displayArmySheet
+}: {
+  position: Vector;
+  displayArmySheet: () => any;
+}) 
+  {
+  useType(ArmySprite);
 
   const geometry = useNewComponent(() =>
     Geometry({
@@ -26,4 +34,9 @@ export default function Box(position: Vector) {
     context.fillStyle = "red";
     geometry.shape.draw(context, "fill");
   });
+
+  const mouse = useNewComponent(Mouse);
+  mouse.onClick(() => {
+    displayArmySheet();
+  });  
 }
