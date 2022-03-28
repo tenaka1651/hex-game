@@ -11,6 +11,8 @@ import {
   useNewRootComponent,
 } from "@hex-engine/2d";
 import HexGrid from "./HexGrid";
+import ArmySprite from "./Sprites/ArmySprite";
+import HexCell from "./HexCell";
 
 export default function Root() {
   useType(Root);
@@ -35,4 +37,14 @@ export default function Root() {
       label.draw(context, { x: 3, y: font.size });
     });
   });
+
+  useNewComponent(() =>
+    Canvas.DrawOrder(function sort(entities) {
+      const sorted = Canvas.DrawOrder.defaultSort(entities);
+      return sorted.sort((a, b) => {
+        if (a.type === ArmySprite || b.type === HexCell) return 1;
+        if (b.type === ArmySprite || a.type === HexCell) return -1;
+        return 0;
+      });
+  }));
 }
