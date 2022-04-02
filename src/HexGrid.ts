@@ -8,10 +8,7 @@ import {
   Vector,
   Grid,
   Geometry,
-  Polygon,
-  SystemFont,
-  Label,
-  useDraw,
+  Polygon
 } from "@hex-engine/2d";
 import HexCell, { CELL_WIDTH, CELL_HEIGHT } from "./HexCell";
 
@@ -53,13 +50,11 @@ export default function HexGrid(position: Vector) {
           if(grid.get(x, y).naturalResources.agriculture > 5) return "green"
           return "grey"
         },
-        getArmies: () => {
-          return grid.get(x,y).armies;
-        },
         getResources: () => {
           let nr = grid.get(x,y);
           return "G:"+ nr.naturalResources.gold.toString() + " S:"+ nr.naturalResources.silver.toString() + " I:"+ nr.naturalResources.iron.toString() + " A:"+ nr.naturalResources.agriculture.toString();
         },
+        tileContents: grid.get(x,y),
         developResource: (resource: string) => {
           var nr = grid.get(x,y);
           switch(resource) {
@@ -77,21 +72,6 @@ export default function HexGrid(position: Vector) {
            }                  
           }
           grid.set(x,y,nr);
-        },
-        displayArmySheet: () => {
-          const font = useNewComponent(() =>
-            SystemFont({ name: "sans-serif", size: 12, color: "black" })
-          );
-          const label = useNewComponent(() =>
-            Label({
-              font
-            })
-          );
-          useDraw((context) => {
-            label.text = "Archers = "+grid.get(x,y).armies[0].archers.toString();
-            label.draw(context, { x: 230, y: 0 });
-            //TODO try instead passing the Army details or TileDetails down to child functions as a generic Type, then the child type can deal with implementation
-          });          
         }
       })
     );

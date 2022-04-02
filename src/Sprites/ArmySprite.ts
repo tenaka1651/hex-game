@@ -1,3 +1,4 @@
+import { useChild } from '@hex-engine/core';
 import {
   useType,
   useNewComponent,
@@ -9,13 +10,15 @@ import {
   Mouse,
 } from "@hex-engine/2d";
 import Draggable from "../Draggable";
+import ArmySheet from "./ArmySheet";
+import { Army } from '../Domain/Army';
 
 export default function ArmySprite({
   position,
-  displayArmySheet
+  army,
 }: {
   position: Vector;
-  displayArmySheet: () => any;
+  army: Army;
 }) 
   {
   useType(ArmySprite);
@@ -30,13 +33,16 @@ export default function ArmySprite({
   useNewComponent(() => Physics.Body(geometry, {isStatic : true}));
   useNewComponent(() => Draggable(geometry));
 
+  useChild(() => {
+    useNewComponent(() => ArmySheet(army));
+  });
+
+
   useDraw((context) => {
     context.fillStyle = "red";
     geometry.shape.draw(context, "fill");
   });
 
   const mouse = useNewComponent(Mouse);
-  mouse.onClick(() => {
-    displayArmySheet();
-  });  
+
 }

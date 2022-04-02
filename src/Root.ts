@@ -1,18 +1,16 @@
+import { Army } from './Domain/Army';
 import {
   useType,
   useNewComponent,
   useChild,
   Canvas,
   Vector,
-  Label,
-  SystemFont,
-  useDraw,
   useRootEntity,
-  useNewRootComponent,
+  useUpdate,
 } from "@hex-engine/2d";
 import HexGrid from "./HexGrid";
-import ArmySprite from "./Sprites/ArmySprite";
 import HexCell from "./HexCell";
+import ArmySprite from './Sprites/ArmySprite';
 
 export default function Root() {
   useType(Root);
@@ -22,29 +20,30 @@ export default function Root() {
 
   useChild(() => HexGrid(new Vector(100, 200)));
 
-  useChild(() => {
-    const font = useNewComponent(() =>
-      SystemFont({ name: "sans-serif", size: 16, color: "black" })
-    );
-    const label = useNewComponent(() =>
-      Label({
-        text: "Click cell to set to blue, right-click to set to white",
-        font,
-      })
-    );
-
-    useDraw((context) => {
-      label.draw(context, { x: 3, y: font.size });
-    });
+  // useNewComponent(() =>
+  //   Canvas.DrawOrder(function sort(entities) {
+  //     const sorted = Canvas.DrawOrder.defaultSort(entities);
+  //     return sorted.sort((a, b) => {
+  //       if (a.type === ArmySprite || b.type === HexCell) return 1;
+  //       if (b.type === ArmySprite || a.type === HexCell) return -1;
+  //       return 0;
+  //     });
+  // }));
+// The System Component
+function ProcessFuelRefills() {
+  useType(ProcessFuelRefills);
+  const root = useRootEntity();
+  useUpdate(() => {
+    const allEntities = root.descendants();
+    const cells = allEntities.filter(ent => ent.getComponent(HexCell));
+    for (const ent of allEntities) {
+      const fuelTank = ent.getComponent(ArmySprite);
+      // fuelTank will be null if the entity doesn't have a fuel tank
+      //if (!fuelTank) continue;
+      //if (cells.some(refiller => /* return whether ent is colliding with refiller */)) {
+        //fuelTank.value = fuelTank.capacity;
+      //}
+    }
   });
-
-  useNewComponent(() =>
-    Canvas.DrawOrder(function sort(entities) {
-      const sorted = Canvas.DrawOrder.defaultSort(entities);
-      return sorted.sort((a, b) => {
-        if (a.type === ArmySprite || b.type === HexCell) return 1;
-        if (b.type === ArmySprite || a.type === HexCell) return -1;
-        return 0;
-      });
-  }));
+}  
 }

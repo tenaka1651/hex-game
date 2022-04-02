@@ -1,3 +1,4 @@
+import { TileContents } from './Domain/TileContents';
 import { Army } from './Domain/Army';
 import {
   useType,
@@ -23,16 +24,14 @@ export default function HexCell({
   position,
   getColor,
   getResources,
-  getArmies,
-  developResource,
-  displayArmySheet
+  tileContents,
+  developResource
 }: {
   position: Vector;
   getColor: () => string;
   getResources : () => string;
-  getArmies : () => Army[];
+  tileContents : TileContents;
   developResource: (resource: string) => any;
-  displayArmySheet: () => any;
 }) {
   useType(HexCell);
 
@@ -47,15 +46,7 @@ export default function HexCell({
 
   useNewComponent(() => Geometry({ shape, position }));
  
-  //draw armies
-  if(getArmies().length > 0) {
-    useChild(() => ArmySprite({
-      position: new Vector(0, 0),
-      displayArmySheet: () => {
-        displayArmySheet();
-      }
-    }));
-  }
+  //useNewComponent(() => TileContents({ shape, position }));
 
 
   useChild(() => {
@@ -92,9 +83,16 @@ export default function HexCell({
 
   mouse.onClick(() => {
     developResource("gold");
+    //tileContents.armies[0].archers++;
   });
 
   mouse.onRightClick(() => {
-    //useChild(() => Box(new Vector(0, 0)));
+    //draw armies
+    if(tileContents.armies.length > 0) {
+      useChild(() => ArmySprite({
+        position: new Vector(0, 0),
+        army: tileContents.armies[0]
+      }));
+    }
   });
 }
