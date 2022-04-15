@@ -7,7 +7,9 @@ import {
   Mouse,
   Vector,
   LowLevelMouse,
+  useEntitiesAtPoint,
 } from "@hex-engine/2d";
+import HexCell, { GridPosition } from "./HexCell";
 
 export default function Draggable(geometry: ReturnType<typeof Geometry>) {
   useType(Draggable);
@@ -40,8 +42,28 @@ export default function Draggable(geometry: ReturnType<typeof Geometry>) {
     if (physics) {
       physics.setStatic(originalStatic);
     }
+    if (isDragging) {
+      const startingCell = useEntity().parent;
+      if (startingCell != null) {
+        const gridPos = startingCell.getComponent(GridPosition);
+        console.log(gridPos?.x.toString() + ","+ gridPos?.y.toString())
+        //get target HexCell
+        const entitiesAtDrop = useEntitiesAtPoint(geometry.worldPosition());
+        const cellsAtDrop = entitiesAtDrop.filter(e => e.getComponent(HexCell))
+        for (const ent of cellsAtDrop) {
+          const cell = ent.getComponent(GridPosition)
+          console.log("dropped on - "+cell?.x.toString()+","+cell?.y.toString())
+        }
+      }
+    }
     isDragging = false;
   };
   mouse.onUp(onUpHandler);
-  onCanvasLeave(onUpHandler);
+  //onCanvasLeave(onUpHandler);
+
+  return {
+    get isDragging() {
+      return isDragging;
+    },
+  };  
 }

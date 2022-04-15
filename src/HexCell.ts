@@ -1,33 +1,37 @@
-import { TileContents } from './Domain/TileContents';
-import { Army } from './Domain/Army';
 import {
   useType,
   useNewComponent,
-  useEntity,
   Vector,
   Geometry,
   Polygon,
   Mouse,
   useDraw,
-  TextBox,
   SystemFont,
   Label,
 } from "@hex-engine/2d";
 import { useChild } from "@hex-engine/core";
 import ArmySprite from './Sprites/ArmySprite';
+import {TileContents} from './Domain/TileContents'
 
 export const CELL_RADIUS = 46;
 export const CELL_WIDTH = Math.sqrt(3) * CELL_RADIUS;
 export const CELL_HEIGHT = 2 * CELL_RADIUS;
 
+export function GridPosition(x: number, y: number) {
+  useType(GridPosition);
+  return { x, y };
+}
+
 export default function HexCell({
   position,
+  gridCoordinates,
   getColor,
   getResources,
   tileContents,
   developResource
 }: {
   position: Vector;
+  gridCoordinates: Vector;
   getColor: () => string;
   getResources : () => string;
   tileContents : TileContents;
@@ -44,10 +48,11 @@ export default function HexCell({
     new Vector(0, 0.25 * CELL_HEIGHT),
   ]);
 
-  useNewComponent(() => Geometry({ shape, position }));
- 
-  //useNewComponent(() => TileContents({ shape, position }));
+  const xPos = gridCoordinates.x;
+  const yPos = gridCoordinates.y;
 
+  useNewComponent(() => Geometry({ shape, position }));
+  useNewComponent(() => GridPosition(xPos,yPos));
 
   useChild(() => {
     const font = useNewComponent(() =>

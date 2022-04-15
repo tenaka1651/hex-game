@@ -15,7 +15,7 @@ import { Army } from '../Domain/Army';
 
 export default function ArmySprite({
   position,
-  army,
+  army
 }: {
   position: Vector;
   army: Army;
@@ -31,7 +31,11 @@ export default function ArmySprite({
   );
 
   useNewComponent(() => Physics.Body(geometry, {isStatic : true}));
-  useNewComponent(() => Draggable(geometry));
+  
+  const draggable = useNewComponent(() => Draggable(geometry));
+  if (draggable.isDragging) {
+    console.log(position.x.toString()+"-"+position.y.toString());
+  }
 
   useChild(() => {
     useNewComponent(() => ArmySheet(army));
@@ -42,7 +46,5 @@ export default function ArmySprite({
     context.fillStyle = "red";
     geometry.shape.draw(context, "fill");
   });
-
-  const mouse = useNewComponent(Mouse);
 
 }
