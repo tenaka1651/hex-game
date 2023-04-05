@@ -10,8 +10,9 @@ import {
   useEntitiesAtPoint,
 } from "@hex-engine/2d";
 import HexCell, { GridPosition } from "./HexCell";
+import { Emitter, EventType } from "mitt";
 
-export default function Draggable(geometry: ReturnType<typeof Geometry>) {
+export default function Draggable(geometry: ReturnType<typeof Geometry>, emitter: Emitter<Record<EventType, unknown>>) {
   useType(Draggable);
 
   const physics = useEntity().getComponent(Physics.Body);
@@ -46,13 +47,14 @@ export default function Draggable(geometry: ReturnType<typeof Geometry>) {
       const startingCell = useEntity().parent;
       if (startingCell != null) {
         const gridPos = startingCell.getComponent(GridPosition);
-        console.log(gridPos?.x.toString() + ","+ gridPos?.y.toString())
+        //console.log(gridPos?.x.toString() + ","+ gridPos?.y.toString())
         //get target HexCell
         const entitiesAtDrop = useEntitiesAtPoint(geometry.worldPosition());
         const cellsAtDrop = entitiesAtDrop.filter(e => e.getComponent(HexCell))
         for (const ent of cellsAtDrop) {
           const cell = ent.getComponent(GridPosition)
-          console.log("dropped on - "+cell?.x.toString()+","+cell?.y.toString())
+          emitter.emit('hexmove', { x1: gridPos?.x.toString(), y1: gridPos?.y.toString(), x2: cell?.x.toString(), y2: cell?.y.toString() })
+          //console.log("dropped on - "+cell?.x.toString()+","+cell?.y.toString())
         }
       }
     }

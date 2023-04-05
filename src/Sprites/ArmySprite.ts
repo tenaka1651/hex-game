@@ -12,13 +12,16 @@ import {
 import Draggable from "../Draggable";
 import ArmySheet from "./ArmySheet";
 import { Army } from '../Domain/Army';
+import { Emitter, EventType } from "mitt";
 
 export default function ArmySprite({
   position,
-  army
+  army,
+  emitter
 }: {
   position: Vector;
   army: Army;
+  emitter: Emitter<Record<EventType, unknown>>;
 }) 
   {
   useType(ArmySprite);
@@ -32,14 +35,14 @@ export default function ArmySprite({
 
   useNewComponent(() => Physics.Body(geometry, {isStatic : true}));
   
-  const draggable = useNewComponent(() => Draggable(geometry));
+  const draggable = useNewComponent(() => Draggable(geometry, emitter));
   if (draggable.isDragging) {
     console.log(position.x.toString()+"-"+position.y.toString());
   }
 
-  useChild(() => {
-    useNewComponent(() => ArmySheet(army));
-  });
+  // useChild(() => {
+  //   useNewComponent(() => ArmySheet(army));
+  // });
 
 
   useDraw((context) => {

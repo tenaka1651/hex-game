@@ -4,10 +4,12 @@ import { Army } from './Army';
 export class TileContents {
     armies: Army[];
     naturalResources: NaturalResources;
+    explored: boolean;
 
-    constructor() {
-        this.armies = new Array<Army>();
-        this.naturalResources = new NaturalResources();
+    constructor(armies: Army[], naturalResources: NaturalResources, explored: boolean) {
+        this.armies = armies;
+        this.naturalResources = naturalResources;
+        this.explored = explored;
     }
 
 }

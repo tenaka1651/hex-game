@@ -10,8 +10,8 @@ import {
   Label,
 } from "@hex-engine/2d";
 import { useChild } from "@hex-engine/core";
-import ArmySprite from './Sprites/ArmySprite';
 import {TileContents} from './Domain/TileContents'
+import { Emitter, EventType } from "mitt";
 
 export const CELL_RADIUS = 46;
 export const CELL_WIDTH = Math.sqrt(3) * CELL_RADIUS;
@@ -25,6 +25,7 @@ export function GridPosition(x: number, y: number) {
 export default function HexCell({
   position,
   gridCoordinates,
+  emitter,
   getColor,
   getResources,
   tileContents,
@@ -32,6 +33,7 @@ export default function HexCell({
 }: {
   position: Vector;
   gridCoordinates: Vector;
+  emitter: Emitter<Record<EventType, unknown>>;
   getColor: () => string;
   getResources : () => string;
   tileContents : TileContents;
@@ -87,17 +89,17 @@ export default function HexCell({
   });
 
   mouse.onClick(() => {
-    developResource("gold");
-    //tileContents.armies[0].archers++;
+    emitter.emit('hexclick', {x: xPos, y: yPos});
   });
 
-  mouse.onRightClick(() => {
-    //draw armies
-    if(tileContents.armies.length > 0) {
-      useChild(() => ArmySprite({
-        position: new Vector(0, 0),
-        army: tileContents.armies[0]
-      }));
-    }
-  });
+  // mouse.onRightClick(() => {
+  //   //draw armies
+  //   if(tileContents.armies.length > 0) {
+  //     useChild(() => ArmySprite({
+  //       position: new Vector(0, 0),
+  //       army: tileContents.armies[0],
+  //       emitter: emitter
+  //     }));
+  //   }
+  // });
 }

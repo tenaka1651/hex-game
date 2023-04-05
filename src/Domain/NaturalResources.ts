@@ -6,11 +6,11 @@ export class NaturalResources {
     iron: number;
     agriculture: number;
 
-    constructor() {
-        this.gold = TileMath.getRandomInt(9);
-        this.silver = TileMath.getRandomInt(9);
-        this.iron = TileMath.getRandomInt(9);
-        this.agriculture = TileMath.getRandomInt(9);
+    constructor(gold: number, silver: number, iron: number, agriculture: number) {
+        this.gold = gold;
+        this.silver = silver;
+        this.iron = iron;
+        this.agriculture = agriculture;
     }
 
 }
